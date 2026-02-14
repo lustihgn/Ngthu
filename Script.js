@@ -1,59 +1,72 @@
-// ===== NHẠC NỀN =====
+// ===== NHẠC =====
 const bgm = document.getElementById("bgm");
+
 function startMusic() {
   bgm.volume = 0.5;
   bgm.play().catch(() => {});
   document.removeEventListener("click", startMusic);
   document.removeEventListener("touchstart", startMusic);
 }
+
 document.addEventListener("click", startMusic);
 document.addEventListener("touchstart", startMusic);
 
-// ===== POPUP + VẬT RƠI =====
-const tetItems = ["🎆", "✨", "🎇", "🌟"];
 
-/* 🔥 ĐÃ NÂNG LÊN 7 ẢNH */
+// ===== SAO + POPUP =====
+const stars = ["⭐","🌟","✨","💫","🌠","✦","✧"];
+
 const cards = [
-  { img: "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=600&q=80", text: "Chúc năm mới phát tài!" },
-  { img: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=600&q=80", text: "Gia đình hạnh phúc!" },
-  { img: "https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=600&q=80", text: "Xuân an khang!" },
-  { img: "https://images.unsplash.com/photo-1606788075765-42fbeae5a0b7?auto=format&fit=crop&w=600&q=80", text: "Vạn sự như ý!" },
-  { img: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80", text: "Sức khỏe dồi dào!" },
-  { img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80", text: "Thành công rực rỡ!" },
-  { img: "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?auto=format&fit=crop&w=600&q=80", text: "Niềm vui tràn đầy!" }
+  { img:"anh1.jpg", text:"❤️Chúc Diễm năm mới sẽ có thêm thật là nhiều niềm vui ❤️" },
+  { img:"anh2.jpg", text:"❤️‍🩹Năm mới mong Diễm sẽ luôn được bình an và nhẹ lòng❤️‍🩹" },
+  { img:"anh3.jpg", text:"😍Chúc Diễm sang năm mới sẽ ngày càng xinh đẹp hơn cả 😍" },
+  { img:"anh4.jpg", text:"🍀Mong rằng sang năm mới sẽ có thật nhiều sự may mắn và tốt đẹp tới với Diễm🍀" },
+  { img:"anh5.jpg", text:"💕Mong Diễm sẽ luôn nhận được sự yêu thương và trân trọng 💕" },
+  { img:"anh6.jpg", text:"☁️Chúc cho Diễm có một năm nhẹ nhàng và ít phải lo nghĩ nhe ☁️" },
+  { img:"anh7.jpg", text:"💜Mong cho Diễm có một năm thật thuận lợi và hạnh phúc 💜" }
 ];
 
-let lastIndex = -1;
+// preload ảnh
+cards.forEach(card => {
+  const img = new Image();
+  img.src = card.img;
+});
+
+let currentIndex = 0;
+
 const popup = document.getElementById("popup");
 const popupImg = document.getElementById("popup-img");
 const popupText = document.getElementById("popup-text");
 
-function createTetItem() {
-  const item = document.createElement("div");
-  item.className = "flower";
-  item.textContent = tetItems[Math.floor(Math.random() * tetItems.length)];
-  item.style.left = Math.random() * innerWidth + "px";
-  item.style.animationDuration = 8 + Math.random() * 3 + "s";
+function createStar() {
+  const star = document.createElement("div");
+  star.className = "star";
+  star.textContent = stars[Math.floor(Math.random()*stars.length)];
 
-  item.onclick = () => {
-    let i;
-    do { i = Math.floor(Math.random() * cards.length); }
-    while (i === lastIndex);
-    lastIndex = i;
+  star.style.left = Math.random()*window.innerWidth + "px";
+  star.style.fontSize = (24 + Math.random()*20) + "px";
+  star.style.animationDuration = (6 + Math.random()*4) + "s";
 
-    popupImg.classList.remove("show");
-    popupImg.src = cards[i].img;
-    popupText.innerText = cards[i].text;
+  star.onclick = () => {
+    popupImg.src = cards[currentIndex].img;
+    popupText.innerText = cards[currentIndex].text;
     popup.style.display = "flex";
-    setTimeout(() => popupImg.classList.add("show"), 50);
+
+    currentIndex++;
+    if(currentIndex >= cards.length){
+      currentIndex = 0;
+    }
   };
 
-  document.body.appendChild(item);
-  setTimeout(() => item.remove(), 13000);
+  document.body.appendChild(star);
+  setTimeout(() => star.remove(), 12000);
 }
 
-setInterval(createTetItem, 1000);
-popup.onclick = () => popup.style.display = "none";
+setInterval(createStar, 700);
+
+popup.onclick = () => {
+  popup.style.display = "none";
+};
+
 
 // ===== PHÁO HOA =====
 const canvas = document.getElementById("fireworks");
@@ -68,53 +81,56 @@ addEventListener("resize", resize);
 
 class Firework {
   constructor() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height * 0.6;
+    this.x = Math.random()*canvas.width;
+    this.y = Math.random()*canvas.height*0.6;
     this.particles = [];
-    this.color = `hsla(${Math.random() * 360},80%,65%,0.8)`;
+    this.color = `hsla(${Math.random()*360},80%,65%,0.8)`;
 
-    for (let i = 0; i < 20; i++) {
+    for(let i=0;i<20;i++){
       this.particles.push({
-        x: this.x,
-        y: this.y,
-        a: Math.random() * Math.PI * 2,
-        s: Math.random() * 1.5 + 0.5,
-        l: 60
+        x:this.x,
+        y:this.y,
+        a:Math.random()*Math.PI*2,
+        s:Math.random()*1.5+0.5,
+        l:60
       });
     }
   }
 
-  update() {
-    this.particles.forEach(p => {
-      p.x += Math.cos(p.a) * p.s;
-      p.y += Math.sin(p.a) * p.s;
+  update(){
+    this.particles.forEach(p=>{
+      p.x+=Math.cos(p.a)*p.s;
+      p.y+=Math.sin(p.a)*p.s;
       p.l--;
     });
-    this.particles = this.particles.filter(p => p.l > 0);
+    this.particles=this.particles.filter(p=>p.l>0);
   }
 
-  draw() {
-    this.particles.forEach(p => {
+  draw(){
+    this.particles.forEach(p=>{
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
-      ctx.fillStyle = this.color;
+      ctx.arc(p.x,p.y,1.5,0,Math.PI*2);
+      ctx.fillStyle=this.color;
       ctx.fill();
     });
   }
 }
 
 let fireworks = [];
-function animate() {
-  ctx.fillStyle = "rgba(0,0,20,0.2)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  if (Math.random() < 0.03) fireworks.push(new Firework());
-  fireworks.forEach((f, i) => {
+function animate(){
+  ctx.fillStyle="rgba(0,0,20,0.2)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  if(Math.random()<0.04) fireworks.push(new Firework());
+
+  fireworks.forEach((f,i)=>{
     f.update();
     f.draw();
-    if (!f.particles.length) fireworks.splice(i, 1);
+    if(!f.particles.length) fireworks.splice(i,1);
   });
 
   requestAnimationFrame(animate);
 }
+
 animate();
