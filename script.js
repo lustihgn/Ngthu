@@ -16,7 +16,7 @@ document.addEventListener("touchstart", startMusic);
 const icons = ["⭐","🌟","✨","☆","★","✧","✦","⋆"];
 
 const cards = [
-  { img:"anh1.jpg", text:"❤️Chúc NThư năm mới sẽ có thêm thật là nhiều niềm vui ❤️" },
+  { img:"anh1.jpg", text:"❤️Chúc Thư năm mới sẽ có thêm thật là nhiều niềm vui ❤️" },
   { img:"anh2.jpg", text:"💀Sau gặp lại đừng có nhìn t thế này nhá👻" },
   { img:"anh1.jpg", text:"😍Chúc Thư sang năm mới sẽ ngày càng xinh đẹp hơn cả 😍" },
   { img:"anh3.jpg", text:"💔Có gặp lại đừng tỏ ra không quen biết nhe💔" },
